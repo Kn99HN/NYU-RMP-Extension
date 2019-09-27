@@ -1,7 +1,7 @@
 body {
     font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
     font-size: 90%;
-    max-width:250px;
+    max-width:280px;
     min-height:100px;
     overflow: auto;
 }
@@ -20,7 +20,7 @@ div.link *
     content: "";
     display: block;
     height: 18px;
-    width: 250px;
+    width: 280px;
 }
 
 h3 {

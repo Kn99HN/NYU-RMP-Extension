@@ -6,10 +6,12 @@ chrome.runtime.onMessage.addListener(
     var listInstructor = [];
     var links = [];
     if( request.message === "clicked_browser_action" ) {
+      //let values = document.
       //Using a really gross over-estimation of the number of available id to be 300
       for(var i = 0; i < 300; i++) {
         var id = 'win0divNYU_CLS_DERIVED_HTMLAREA3$' + i
         var values = document.getElementById(id);
+        // console.log(i, values)
         //if the values is null skip to the next iteration
         if(values == null) {
           continue;
@@ -19,7 +21,9 @@ chrome.runtime.onMessage.addListener(
         for(var j = 0; j < name.length; j++) {
           var field = name[j].innerText;
           //Split at Notes for section where there is a Note section
-          var fields = field.split('Notes')
+          var fields = field.split('Notes');
+          var class_name = field.split('4 units');
+          var final_class = class_name[0].split("|")[0];
           if(fields[0].includes('with')) {
             var instructor = fields[0].split('with')[1];
             //Handle case where there are two professors for one class
@@ -29,39 +33,28 @@ chrome.runtime.onMessage.addListener(
               if(listInstructor.includes(professor1)) {
                 continue;
               }
-              listInstructor.push(professor1);
+              //listInstructor.push(professor1);
             } else {
               var professor = handleComma(instructor);
               if(listInstructor.includes(professor)) {
                 continue;
               }
-              listInstructor.push(professor);
+              //console.log(final_class);
+              listInstructor.push({"Professor": professor, "Class": final_class});
             }
           }
         }
       }
       // Send back the value with the message
       chrome.runtime.sendMessage({"message": "open_new_tab", "url": listInstructor});
-    } else if(request.message = "send_link") {
-      //add the link to the location with matching professor name
-      chrome.storage.local.get('List', function(result){
-        var list = JSON.stringify(result);
-        var testResult = result;
-        var profName = testResult['List'];
-        for(var i = 0; i < profName.length; i++) {
-      
-          var prof_name = profName[i]['Prof_name'].replace('\n','');
-          var link = profName[i]['link'].replace('\n','');
-          add_link(link, prof_name);
-        }
-      });
-      //add_link(request.link, request.name);
     }
   }
 );
 
+
+
+
 //handle the case with colons, having two professor in one class
-//NOTES: NEED MORE WORK
 function handleColon(instructor) {
   instructor = instructor.replace(',', '');
   instructor = instructor.split(';');
@@ -78,8 +71,8 @@ function handleComma(instructor) {
   return professor;
 }
 
+/*ARCHIVED for Future Usage
 function add_link(link, prof_name) {
-  //alert('hello world');
   for(var i = 0; i < 300; i++) {
     var id = 'win0divNYU_CLS_DERIVED_HTMLAREA3$' + i
     var values = document.getElementById(id);
@@ -109,16 +102,13 @@ function add_link(link, prof_name) {
             }
           }
         } else {
-          //console.log(typeof prof_name);
           var professor = handleComma(instructor);
-          //console.log('Find Professor: ' + professor + 'Input Professor: ' + prof_name);
           if(professor.trim() === prof_name.trim()) {
             var link_prof = document.createElement('a');
             link_prof.setAttribute('href',link);
             link_prof.setAttribute('id', prof_name)
             link_prof.setAttribute('target',"_blank");
             link_prof.innerHTML = prof_name;
-            //name.appendChild(link_prof)
             var id = document.getElementById(prof_name);
             console.log('Iteration ' + link + ' professor: ' + prof_name);
             if(name[j].contains(id) === false) {
@@ -130,3 +120,18 @@ function add_link(link, prof_name) {
     }
   }
 }
+
+else if(request.message = "send_link") {
+  //add the link to the location with matching professor name
+  chrome.storage.local.get('List', function(result){
+    var testResult = result;
+    var profName = testResult['List'];
+    if(profName != null) {
+      for(var i = 0; i < profName.length; i++) {
+        var prof_name = profName[i]['Prof_name'].replace('\n','');
+        var link = profName[i]['link'].replace('\n','');
+        add_link(link, prof_name);
+      }
+    }
+  });
+}*/
