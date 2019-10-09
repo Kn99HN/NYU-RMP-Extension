@@ -42,8 +42,6 @@ Retrieve value from content scripts
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     if( request.message === "open_new_tab" ) {
-      alert(JSON.stringify(request))
-      //alert('sendResponse ', sendResponse)
       var list = request.url;
       createPane();
       var link = [];
@@ -56,7 +54,6 @@ chrome.runtime.onMessage.addListener(
            professor.setAttribute('href',value);
            professor.setAttribute('target',"_blank");
            professor.innerHTML = name + ' - ' + className;
-           alert(className);
            var container = document.getElementById('Professor');
            if(container != null) {
              container.appendChild(professor);

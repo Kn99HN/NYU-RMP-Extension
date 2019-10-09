@@ -11,7 +11,6 @@ chrome.runtime.onMessage.addListener(
       for(var i = 0; i < 300; i++) {
         var id = 'win0divNYU_CLS_DERIVED_HTMLAREA3$' + i
         var values = document.getElementById(id);
-        // console.log(i, values)
         //if the values is null skip to the next iteration
         if(values == null) {
           continue;
@@ -39,7 +38,6 @@ chrome.runtime.onMessage.addListener(
               if(listInstructor.includes(professor)) {
                 continue;
               }
-              //console.log(final_class);
               listInstructor.push({"Professor": professor, "Class": final_class});
             }
           }
