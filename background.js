@@ -1,8 +1,5 @@
-// Called when the user clicks on the browser action.
+// Called when the user clicks on the browser action and make a popup
 chrome.browserAction.onClicked.addListener(function(tab) {
-  /*
-  Make a pop up
-  */
   chrome.browserAction.setPopup({popup: 'popup.html'});
 });
 
@@ -36,9 +33,7 @@ function sendLink() {
   });
 }
 
-/*
-Retrieve value from content scripts
-*/
+//Retrieve value from content scripts and attach the links to the GUI
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     if( request.message === "open_new_tab" ) {
@@ -56,17 +51,13 @@ chrome.runtime.onMessage.addListener(
            if(container != null) {
              container.appendChild(professor);
            }
-
-       });
+        });
       }
     }
-    //Hide the button after clicking
     hideButton();
-    //Add an author tag to the chrome extension
     footer();
   }
 );
-
 //Set up the author tag
 function footer() {
   var author = document.getElementById('author');
@@ -83,7 +74,6 @@ function footer() {
     author.appendChild(title);
   }
 }
-
 //Set up the pane after button is clicked
 function createPane() {
   var container = document.getElementById('container');
@@ -95,7 +85,6 @@ function createPane() {
     container.appendChild(hr);
   }
 }
-
 //Hide the button after clicked
 function hideButton() {
   var value = document.getElementById('btn');
@@ -104,7 +93,6 @@ function hideButton() {
     value.parentNode.removeChild(value);
   }
 }
-
 /*
 Search Professor Name using XMLHttpRequest and check if their query has New York University name in it.
 If so, append a link.
@@ -123,19 +111,18 @@ function searchProf(name, class_name, callback) {
       //Make a XMLHttpRequest to the server using all the available name
       req.open("GET", 'https://www.ratemyprofessors.com/search.jsp?query=' + param, true);
       req.onreadystatechange = function() {
-            if (req.readyState == 4 ) {
+            if (req.readyState == 4) {
               if(req.status == 200) {
                 var text = req.responseText;
-                //If the text has New York University or NYU, include it and extract
                 if(text.includes('New York University') === true || text.includes('NYU')) {
                   var dummy = document.createElement('html');
                   dummy.innerHTML = text;
                   professors = dummy.getElementsByClassName('listing PROFESSOR');
-                  //return the links of the associated professor
+                  //Iterate through all the professors with same name to find those at NYU
                   for(var i = 0; i < professors.length; i++) {
                     var school = professors[i].getElementsByClassName('sub');
                     if(school[0].textContent.includes('New York University')
-                      || school[0].textContent.includes('NYU')) {
+                    || school[0].textContent.includes('NYU')) {
                       link = 'https://www.ratemyprofessors.com' + professors[i].innerHTML.match(/href="([^"]*)/)[1];
                     }
                   }
@@ -146,6 +133,4 @@ function searchProf(name, class_name, callback) {
         };
         req.send();
   }
-
-
 }
