@@ -47,9 +47,9 @@ chrome.runtime.onMessage.addListener(
       //Iterate through the list of instructor and get links for each
       for(var i = 0; i < list.length; i++) {
         var className = list[i]["Class"];
-        searchProf(list[i]["Professor"], list[i]["Class"], function(name, className) {
+        searchProf(list[i]["Professor"], list[i]["Class"], function(name, className, link) { //missing the link
            var professor = document.createElement('a');
-           professor.setAttribute('href',name);
+           professor.setAttribute('href',link);
            professor.setAttribute('target',"_blank");
            professor.innerHTML = name + ': ' + className;
            var container = document.getElementById('Professor');
@@ -139,7 +139,7 @@ function searchProf(name, class_name, callback) {
                       link = 'https://www.ratemyprofessors.com' + professors[i].innerHTML.match(/href="([^"]*)/)[1];
                     }
                   }
-                  callback(name, class_name);
+                  callback(name, class_name, link);
                 }
               }
             }
