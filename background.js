@@ -44,23 +44,21 @@ chrome.runtime.onMessage.addListener(
     if( request.message === "open_new_tab" ) {
       var list = request.url;
       createPane();
-      var link = [];
       //Iterate through the list of instructor and get links for each
       for(var i = 0; i < list.length; i++) {
         var className = list[i]["Class"];
-        searchProf(list[i]["Professor"], link, list[i]["Class"], function(name, value, className) {
-           //Create the element anchor with the link and target blank
+        searchProf(list[i]["Professor"], list[i]["Class"], function(name, className) {
            var professor = document.createElement('a');
-           professor.setAttribute('href',value);
+           professor.setAttribute('href',name);
            professor.setAttribute('target',"_blank");
-           professor.innerHTML = name + ' - ' + className;
+           professor.innerHTML = name + ': ' + className;
            var container = document.getElementById('Professor');
            if(container != null) {
              container.appendChild(professor);
            }
+
        });
       }
-      //sendLink();
     }
     //Hide the button after clicking
     hideButton();
@@ -111,7 +109,7 @@ function hideButton() {
 Search Professor Name using XMLHttpRequest and check if their query has New York University name in it.
 If so, append a link.
 */
-function searchProf(name, list, class_name, callback) {
+function searchProf(name, class_name, callback) {
   if(name != undefined) {
       var names = name.toString().split(" ");
       var firstName = names[0];
@@ -141,7 +139,7 @@ function searchProf(name, list, class_name, callback) {
                       link = 'https://www.ratemyprofessors.com' + professors[i].innerHTML.match(/href="([^"]*)/)[1];
                     }
                   }
-                  callback(name,link, class_name);
+                  callback(name, class_name);
                 }
               }
             }

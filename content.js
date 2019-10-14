@@ -23,6 +23,12 @@ chrome.runtime.onMessage.addListener(
           var fields = field.split('Notes');
           var class_name = field.split('4 units');
           var final_class = class_name[0].split("|")[0];
+          //Handle case with Special Topic class
+          if(final_class.includes('Topic:')) {
+            final_class = final_class.split("Topic:")[1].trim();
+            final_class = final_class.split("\n")[0].trim();
+          }
+          console.log(final_class);
           if(fields[0].includes('with')) {
             var instructor = fields[0].split('with')[1];
             //Handle case where there are two professors for one class
@@ -35,6 +41,7 @@ chrome.runtime.onMessage.addListener(
               //listInstructor.push(professor1);
             } else {
               var professor = handleComma(instructor);
+              professor = professor.trim();
               if(listInstructor.includes(professor)) {
                 continue;
               }
