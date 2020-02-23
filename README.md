@@ -6,6 +6,8 @@ NYU-RMP-Extension is a simple chrome extension that scrapes RMP links and displa
 - [ ] Convert JS to Jquery
 - [ ] Adding features that would append the name of the professor to the webpage
 - [ ] Refactor code and using Schedge API
+- [ ] Updating with Contributing.md
+- [ ] Code Documentation
 
 ## To Run:
 - [ ] Go to chrome://extensions/
